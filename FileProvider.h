@@ -28,8 +28,12 @@ class FileProvider : public QObject
     Q_PROPERTY(QUrl iconUrl READ iconUrl NOTIFY iconUrlChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QStringList mimeTypes READ mimeTypes NOTIFY mimeTypesChanged)
+
     Q_PROPERTY(bool isReadable READ isReadable NOTIFY isReadableChanged)
     Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
+
+    Q_PROPERTY(QUrl getFileItemUrl READ getFileItemUrl NOTIFY getFileItemUrlChanged)
+    Q_PROPERTY(QUrl setFileItemUrl READ setFileItemUrl NOTIFY setFileItemUrlChanged)
 
 public:
     explicit FileProvider(QObject *parent = 0);
@@ -45,6 +49,21 @@ public:
 
     bool isReadable() const;
     bool isWritable() const;
+
+    /**
+     * @brief getFileItemUrl Url of the QML Item to get file, may be empty
+     * @details If exists then the Item must have fileProvider and mimeType properties
+     * @return Url for the QML Item
+     */
+    QUrl getFileItemUrl() const;
+
+    /**
+     * @brief setFileItemUrl Url of the QML Item to set file, may be empty
+     * @details If exists then the Item must have fileProvider,
+     * sourceFileName, destFileName and content properties
+     * @return Url for the QML Item
+     */
+    QUrl setFileItemUrl() const;
 
 public slots:
     /// Open appropriate file dialog to user, and user may choose a file
@@ -68,6 +87,9 @@ signals:
 
     void isReadableChanged();
     void isWritableChanged();
+
+    void getFileItemUrlChanged();
+    void setFileItemUrlChanged();
 
     /**
      * @brief getFileCanceled This signal is emitted when user cancel the operaition
@@ -121,8 +143,12 @@ protected:
     virtual QUrl customIconUrl() const;
     virtual QString customName() const;
     virtual QStringList customMimeTypes() const;
+
     virtual bool customIsReadable() const;
     virtual bool customIsWritable() const;
+
+    virtual QUrl customGetFileItemUrl() const;
+    virtual QUrl customSetFileItemUrl() const;
 
     virtual void customGetFile(const QString &mimeType);
     virtual void customSetFileContent(const QString &fileName,

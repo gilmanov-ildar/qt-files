@@ -52,6 +52,16 @@ bool FileProvider::isWritable() const
     return customIsWritable();
 }
 
+QUrl FileProvider::getFileItemUrl() const
+{
+    return customGetFileItemUrl();
+}
+
+QUrl FileProvider::setFileItemUrl() const
+{
+    return customSetFileItemUrl();
+}
+
 void FileProvider::getFile(const QString &mimeType)
 {
     customGetFile(mimeType);
@@ -132,6 +142,16 @@ bool FileProvider::customIsReadable() const
 bool FileProvider::customIsWritable() const
 {
     return false;
+}
+
+QUrl FileProvider::customGetFileItemUrl() const
+{
+    return QUrl();
+}
+
+QUrl FileProvider::customSetFileItemUrl() const
+{
+    return QUrl();
 }
 
 void FileProvider::customGetFile(const QString &mimeType)
