@@ -65,8 +65,9 @@ signals:
     void iconUrlChanged();
     void nameChanged();
     void mimeTypesChanged();
-    bool isReadableChanged();
-    bool isWritableChanged();
+
+    void isReadableChanged();
+    void isWritableChanged();
 
     /**
      * @brief getFileCanceled This signal is emitted when user cancel the operaition
