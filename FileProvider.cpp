@@ -147,6 +147,11 @@ void FileProvider::customSetFileContent(const QString &fileName,
     onSetFileFailed(fileName, tr("Could not set file"));
 }
 
+void FileProvider::onGetFileCanceled(const QString &mimeType)
+{
+    emit getFileCanceled(mimeType);
+}
+
 void FileProvider::onGetFileFailed(const QString &mimeType, const QString &errorMessage)
 {
     qWarning().noquote() << QString("Could not get file with mime type '%1'. %2")
@@ -171,6 +176,11 @@ void FileProvider::onGetFileSucceeded(const QString &mimeType,
     {
         emit getFileSucceeded(actualMimeType.name(), fileName, fileContent);
     }
+}
+
+void FileProvider::onSetFileCanceled(const QString &destFileName)
+{
+    emit setFileCanceled(destFileName);
 }
 
 void FileProvider::onSetFileFailed(const QString &destFileName, const QString &errorMessage)

@@ -69,8 +69,14 @@ signals:
     bool isWritableChanged();
 
     /**
+     * @brief getFileCanceled This signal is emitted when user cancel the operaition
+     * @details Do not emit this signal from inherited class, use onGetFileCanceled() instead
+     * @param mimeType Mime type from getFile()
+     */
+    void getFileCanceled(QString mimeType);
+
+    /**
      * @brief getFileFailed This signal is emitted when a file can not be fetched
-     * or user cancel the operaition
      * @details Do not emit this signal from inherited class, use onGetFileFailed() instead
      * @param mimeType Mime type from getFile()
      * @param errorMessage Translated message to show user
@@ -89,8 +95,14 @@ signals:
                           QSharedPointer<QIODevice> fileContent);
 
     /**
+     * @brief setFileCanceled This signal is emitted when user cancel the operaition
+     * @details Do not emit this signal from inherited class, use onSetFileCanceled() instead
+     * @param destFileName File name from setFile() or setFileContent()
+     */
+    void setFileCanceled(QString destFileName);
+
+    /**
      * @brief setFileFailed This signal is emitted when a file can not be set
-     * or user cancel the operaition
      * @details Do not emit this signal from inherited class, use onSetFileFailed() instead
      * @param destFileName File name from setFile() or setFileContent()
      * @param errorMessage Translated message to show user
@@ -115,11 +127,13 @@ protected:
     virtual void customSetFileContent(const QString &fileName,
                                       const QSharedPointer<QIODevice> &content);
 
+    void onGetFileCanceled(const QString &mimeType);
     void onGetFileFailed(const QString &mimeType, const QString &errorMessage);
     void onGetFileSucceeded(const QString &mimeType,
                             const QString &fileName,
                             const QSharedPointer<QIODevice> &fileContent);
 
+    void onSetFileCanceled(const QString &destFileName);
     void onSetFileFailed(const QString &destFileName, const QString &errorMessage);
     void onSetFileSucceeded(const QString &destFileName);
 
