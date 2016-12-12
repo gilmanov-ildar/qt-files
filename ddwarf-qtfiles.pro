@@ -2,7 +2,7 @@ TEMPLATE = lib
 VERSION = 1.0
 TARGET = ddwarf-qtfiles
 
-QT += 
+QT += qml
 
 CONFIG += c++11
 INCLUDEPATH +=
@@ -20,9 +20,13 @@ unix:!android {
 }
 
 HEADERS += \
+    FileProviderList.h \
+    FileProvider.h
 
 
 SOURCES += \
+    FileProviderList.cpp \
+    FileProvider.cpp
 
 
 OTHER_FILES += \
