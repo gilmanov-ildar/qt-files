@@ -67,7 +67,7 @@ public:
 
 public slots:
     /// Open appropriate file dialog to user, and user may choose a file
-    void getFile(const QString &mimeType);
+    void getFile(const QStringList &mimeTypes);
 
     /// Read the file from sourceFileName and call setFileContent()
     void setFile(const QString &sourceFileName, const QString &destFileName);
@@ -94,22 +94,22 @@ signals:
     /**
      * @brief getFileCanceled This signal is emitted when user cancel the operaition
      * @details Do not emit this signal from inherited class, use onGetFileCanceled() instead
-     * @param mimeType Mime type from getFile()
+     * @param mimeTypes Mime types from getFile()
      */
-    void getFileCanceled(QString mimeType);
+    void getFileCanceled(QStringList mimeTypes);
 
     /**
      * @brief getFileFailed This signal is emitted when a file can not be fetched
      * @details Do not emit this signal from inherited class, use onGetFileFailed() instead
-     * @param mimeType Mime type from getFile()
+     * @param mimeTypes Mime types from getFile()
      * @param errorMessage Translated message to show user
      */
-    void getFileFailed(QString mimeType, QString errorMessage);
+    void getFileFailed(QStringList mimeTypes, QString errorMessage);
 
     /**
      * @brief getFileSucceeded This signal is emitted when file is got
      * @details Do not emit this signal from inherited class, use onGetFileSuceeded() instead
-     * @param mimeType Mime type from getFile(), may be more specific
+     * @param mimeType A mime type from getFile(), may be more specific
      * @param fileName Actual file name of the file
      * @param fileContent Content of the file
      */
@@ -150,12 +150,12 @@ protected:
     virtual QUrl customGetFileItemUrl() const;
     virtual QUrl customSetFileItemUrl() const;
 
-    virtual void customGetFile(const QString &mimeType);
+    virtual void customGetFile(const QStringList &mimeTypes);
     virtual void customSetFileContent(const QString &fileName,
                                       const QSharedPointer<QIODevice> &content);
 
-    void onGetFileCanceled(const QString &mimeType);
-    void onGetFileFailed(const QString &mimeType, const QString &errorMessage);
+    void onGetFileCanceled(const QStringList &mimeTypes);
+    void onGetFileFailed(const QStringList &mimeTypes, const QString &errorMessage);
     void onGetFileSucceeded(const QString &mimeType,
                             const QString &fileName,
                             const QSharedPointer<QIODevice> &fileContent);

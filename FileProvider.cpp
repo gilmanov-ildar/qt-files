@@ -62,9 +62,9 @@ QUrl FileProvider::setFileItemUrl() const
     return customSetFileItemUrl();
 }
 
-void FileProvider::getFile(const QString &mimeType)
+void FileProvider::getFile(const QStringList &mimeTypes)
 {
-    customGetFile(mimeType);
+    customGetFile(mimeTypes);
 }
 
 void FileProvider::setFile(const QString &sourceFileName, const QString &destFileName)
@@ -82,8 +82,8 @@ void FileProvider::setFile(const QString &sourceFileName, const QString &destFil
                                 .arg(file->errorString())
                                 .arg(qobject_cast<QFile*>(file.data())->error());
 
-        onGetFileFailed(QMimeDatabase().
-                        mimeTypeForFile(sourceFileName, QMimeDatabase::MatchExtension).name(),
+        onGetFileFailed({QMimeDatabase().
+                        mimeTypeForFile(sourceFileName, QMimeDatabase::MatchExtension).name()},
                         tr("Could not open file '%1'").arg(sourceFileName));
     }
 }
@@ -154,9 +154,9 @@ QUrl FileProvider::customSetFileItemUrl() const
     return QUrl();
 }
 
-void FileProvider::customGetFile(const QString &mimeType)
+void FileProvider::customGetFile(const QStringList &mimeTypes)
 {
-    onGetFileFailed(mimeType, tr("Could not get file"));
+    onGetFileFailed(mimeTypes, tr("Could not get file"));
 }
 
 void FileProvider::customSetFileContent(const QString &fileName,
@@ -167,18 +167,20 @@ void FileProvider::customSetFileContent(const QString &fileName,
     onSetFileFailed(fileName, tr("Could not set file"));
 }
 
-void FileProvider::onGetFileCanceled(const QString &mimeType)
+void FileProvider::onGetFileCanceled(const QStringList &mimeTypes)
 {
-    emit getFileCanceled(mimeType);
+    emit getFileCanceled(mimeTypes);
 }
 
-void FileProvider::onGetFileFailed(const QString &mimeType, const QString &errorMessage)
+void FileProvider::onGetFileFailed(const QStringList &mimeTypes, const QString &errorMessage)
 {
-    qWarning().noquote() << QString("Could not get file with mime type '%1'. %2")
-                            .arg(mimeType)
-                            .arg(errorMessage);
+    qWarning().noquote()
+            << "Could not get file with mime types '"
+            << mimeTypes
+            << "'. "
+            << errorMessage;
 
-    emit getFileFailed(mimeType, errorMessage);
+    emit getFileFailed(mimeTypes, errorMessage);
 }
 
 void FileProvider::onGetFileSucceeded(const QString &mimeType,
