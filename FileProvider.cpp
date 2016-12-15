@@ -205,7 +205,7 @@ void FileProvider::onGetFileFailed(const QStringList &mimeTypes, const QString &
     qWarning().noquote()
             << "Could not get file with mime types '"
             << mimeTypes
-            << "'. "
+            << "'."
             << errorMessage;
 
     emit getFileFailed(mimeTypes, errorMessage);
