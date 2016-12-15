@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QIODevice>
+#include <QMimeType>
 
 namespace DDwarf {
 namespace Files {
@@ -140,6 +141,9 @@ signals:
     void setFileSucceeded(QString destFileName);
 
 protected:
+    static QStringList convertMimeTypeListToStringList(const QList<QMimeType> &mimeTypes);
+    static QList<QMimeType> convertStringListToMimeTypeList(const QStringList &mimeTypes);
+
     virtual QUrl customIconUrl() const;
     virtual QString customName() const;
     virtual QStringList customMimeTypes() const;

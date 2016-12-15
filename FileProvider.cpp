@@ -119,6 +119,34 @@ void FileProvider::setFileContent(const QString &destFileName, const QVariant &c
     }
 }
 
+QStringList FileProvider::convertMimeTypeListToStringList(const QList<QMimeType> &mimeTypes)
+{
+    QStringList result;
+    result.reserve(mimeTypes.count());
+
+    for(const QMimeType &mimeType : mimeTypes)
+    {
+        result.push_back(mimeType.name());
+    }
+
+    return result;
+}
+
+QList<QMimeType> FileProvider::convertStringListToMimeTypeList(const QStringList &mimeTypes)
+{
+    QList<QMimeType> result;
+    result.reserve(mimeTypes.count());
+
+    QMimeDatabase mimeDatabase;
+
+    for(const QString &mimeType : mimeTypes)
+    {
+        result.push_back(mimeDatabase.mimeTypeForName(mimeType));
+    }
+
+    return result;
+}
+
 QUrl FileProvider::customIconUrl() const
 {
     return QUrl();
