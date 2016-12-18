@@ -79,7 +79,7 @@ public slots:
      * @param destFileName Suggested file name
      * @param content May be QByteArray, QPixmap or QSharedPointer<QIODevice>
      */
-    void setFileContent(const QString &destFileName, const QVariant &content);
+    void setFileContent(const QString &destFileName, const QVariant &fileContent);
 
 signals:
     void iconUrlChanged();
