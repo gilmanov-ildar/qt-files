@@ -93,17 +93,30 @@ QVariant FileProviderList::data(const QModelIndex &index, int role) const
 
     if(item)
     {
-        if(role != Qt::UserRole && m_roles.contains(role))
+        if(role == Qt::UserRole)
+        {
+            return QVariant::fromValue(item);
+        }
+        else if(m_roles.contains(role))
         {
             int propIndex = item->metaObject()->indexOfProperty(m_roles.value(role));
 
             if(propIndex >= 0 && propIndex < item->metaObject()->propertyCount())
             {
-                item->metaObject()->property(propIndex).read(item);
+                return item->metaObject()->property(propIndex).read(item);
+            }
+            else
+            {
+                qWarning().noquote() << QString("Can not find role '%1'")
+                                        .arg(QString(m_roles.value(role)));
+                return QVariant();
             }
         }
-
-        return QVariant::fromValue(item);
+        else
+        {
+            qWarning().noquote() << QString("Can not recognize role '%1'").arg(role);
+            return QVariant();
+        }
     }
     else
     {
