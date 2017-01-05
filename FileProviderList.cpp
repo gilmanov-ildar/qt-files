@@ -142,9 +142,9 @@ void FileProviderList::append(FileProvider *item)
 
         item->setParent(this);
         m_list.push_back(item);
-        emit listChanged();
 
         endInsertRows();
+        emit listChanged();
     }
 }
 
@@ -156,9 +156,9 @@ void FileProviderList::insert(int index, FileProvider *item)
 
         item->setParent(this);
         m_list.insert(index, item);
-        emit listChanged();
 
         endInsertRows();
+        emit listChanged();
     }
 }
 
@@ -183,9 +183,9 @@ void FileProviderList::removeAt(int index)
         beginRemoveRows(QModelIndex(), index, index);
 
         m_list.takeAt(index)->deleteLater();
-        emit listChanged();
 
         endRemoveRows();
+        emit listChanged();
     }
     else
     {
