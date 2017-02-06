@@ -21,6 +21,7 @@ namespace Files {
 /**
  * @brief The FileProvider class is the base class for other file providers,
  * such as DropboxFileProvider, FacebookFileProvider and etc.
+ * @details The default constructor with one argument (QObject *parent) must be marked by Q_INVOKABLE
  */
 class FileProvider : public QObject
 {

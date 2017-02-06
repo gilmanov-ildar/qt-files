@@ -19,33 +19,19 @@
 namespace DDwarf {
 namespace Files {
 
-FileProviderList *FileProviderList::m_instance = nullptr;
+QList<QMetaObject> FileProviderList::m_defaultFileProviders;
 
-FileProviderList *FileProviderList::initStatic()
+void FileProviderList::initStatic()
 {
-    if(m_instance)
-    {
-        qWarning().noquote() << QString("FileProviderList is already initialized");
-        return m_instance;
-    }
-
-    m_instance = new FileProviderList();
-
     // org.ddwarf.files
 
-    qmlRegisterSingletonType<FileProviderList>("org.ddwarf.files",
-                                               1, 0,
-                                               "FileProviderList",
-                                               &FileProviderList::fileProviderListProvider);
-
     qmlRegisterType<FileProvider>("org.ddwarf.files", 1, 0, "FileProvider");
-
-    return m_instance;
+    qmlRegisterType<FileProviderList>("org.ddwarf.files", 1, 0, "FileProviderList");
 }
 
-FileProviderList *FileProviderList::instance()
+void FileProviderList::addDefaultFileProvider(const QMetaObject &fileProviderMetaObject)
 {
-    return m_instance;
+    m_defaultFileProviders.push_back(fileProviderMetaObject);
 }
 
 FileProviderList::FileProviderList(QObject *parent) :
@@ -64,14 +50,22 @@ FileProviderList::FileProviderList(QObject *parent) :
             ++index;
         }
     }
-}
 
-QObject *FileProviderList::fileProviderListProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    for(const QMetaObject &metaObject : m_defaultFileProviders)
+    {
+        QObject *instance = metaObject.newInstance(Q_ARG(QObject*, this));
+        FileProvider *fileProvider = qobject_cast<FileProvider*>(instance);
 
-    return m_instance;
+        if(fileProvider)
+        {
+            m_list.push_back(fileProvider);
+        }
+        else
+        {
+            qWarning() << QString("Can not create new instance of '%1' file provider")
+                          .arg(metaObject.className());
+        }
+    }
 }
 
 int FileProviderList::rowCount(const QModelIndex &parent) const
@@ -137,6 +131,11 @@ int FileProviderList::length() const
 }
 
 void FileProviderList::append(FileProvider *item)
+{
+    add(item);
+}
+
+void FileProviderList::add(FileProvider *item)
 {
     if(!m_list.contains(item))
     {

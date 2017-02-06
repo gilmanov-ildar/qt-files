@@ -28,8 +28,10 @@ class FileProviderList : public QAbstractListModel
     Q_PROPERTY(int length READ length NOTIFY listChanged)
 
 public:
-    static FileProviderList *initStatic();
-    static FileProviderList *instance();
+    static void initStatic();
+    static void addDefaultFileProvider(const QMetaObject &fileProviderMetaObject);
+
+    explicit FileProviderList(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -39,6 +41,7 @@ public:
 
     /// FileProviderList takes ownership of the item
     void append(FileProvider *item);
+    void add(FileProvider *item);
 
     /// FileProviderList takes ownership of the item
     void insert(int index, FileProvider *item);
@@ -60,16 +63,12 @@ signals:
     void listChanged();
 
 protected:
-    explicit FileProviderList(QObject *parent = 0);
 
 private:
-    static FileProviderList *m_instance;
+    static QList<QMetaObject> m_defaultFileProviders;
 
     QHash<int, QByteArray> m_roles;
     QList<FileProvider*> m_list;
-
-    /// Singleton type provider function for Qt Quick
-    static QObject *fileProviderListProvider(QQmlEngine *engine, QJSEngine *scriptEngine);
 };
 
 } // namespace Files
