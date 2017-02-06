@@ -31,6 +31,8 @@ FileProviderList *FileProviderList::initStatic()
 
     m_instance = new FileProviderList();
 
+    // org.ddwarf.files
+
     qmlRegisterSingletonType<FileProviderList>("org.ddwarf.files",
                                                1, 0,
                                                "FileProviderList",
